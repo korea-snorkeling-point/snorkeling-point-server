@@ -1,0 +1,13 @@
+{
+  "cSpell.words": [
+    "Auths",
+    "Iamports",
+    "Kakao",
+    "Naver",
+    "nestjs",
+    "typeorm",
+    "websockets"
+  ],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
