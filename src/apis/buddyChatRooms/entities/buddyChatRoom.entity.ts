@@ -3,13 +3,12 @@ import { BuddyBoard } from 'src/apis/buddyBoards/entities/buddyBoard.entity';
 import { BuddyChatMessage } from 'src/apis/buddyChatMessages/entities/buddyChatMessage.entity';
 
 import {
-  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -20,14 +19,9 @@ export class BuddyChatRoom {
   @Field(() => String)
   id: string;
 
-  // 채팅 상대 강아지의 id
-  @Column()
-  @Field(() => String)
-  buddyChatPairId: string;
-
-  // BuddyChatroom : BuddyBoard - N:1 연결
+  // BuddyChatroom : BuddyBoard - 1:1 연결
   @JoinColumn()
-  @ManyToOne(() => BuddyBoard)
+  @OneToOne(() => BuddyBoard, (buddyBoard) => buddyBoard.buddyChatRoom)
   @Field(() => BuddyBoard)
   buddyBoard: BuddyBoard;
 
@@ -35,9 +29,7 @@ export class BuddyChatRoom {
   @OneToMany(
     () => BuddyChatMessage,
     (buddyChatMessage) => buddyChatMessage.buddyChatRoom,
-    {
-      cascade: true,
-    },
+    { cascade: true },
   )
   @Field(() => [BuddyChatMessage])
   buddyChatMessages: BuddyChatMessage[];

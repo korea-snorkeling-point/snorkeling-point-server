@@ -17,4 +17,4 @@ import { BuddyChatRoom } from './entities/buddyChatRoom.entity';
     BuddyChatRoomsService,
   ],
 })
-export class ChatRoomsModule {}
+export class BuddyChatRoomsModule {}

@@ -7,8 +7,39 @@ import * as redisStore from 'cache-manager-redis-store';
 
 import { AppController } from './app.controller';
 
+// apis
+import { AdminUsersModule } from './apis/adminUsers/adminUsers.module';
+import { AuthsModule } from './apis/auths/auths.module';
+import { BuddyBoardsModule } from './apis/buddyBoards/buddyBoards.module';
+import { BuddyChatMessagesModule } from './apis/buddyChatMessages/buddyChatMessages.module';
+import { BuddyChatRoomsModule } from './apis/buddyChatRooms/buddyChatRooms.module';
+import { FilesModule } from './apis/files/files.module';
+import { IamportsModule } from './apis/imports/imports.module';
+import { PaymentsModule } from './apis/payments/payments.module';
+import { ProductsModule } from './apis/products/products.module';
+import { SnkBoardsModule } from './apis/snkBoards/snkBoards.module';
+import { SnkBoardsImagesModule } from './apis/snkBoardsImages/snkBoardsImages.module';
+import { SnkBoardsTagsModule } from './apis/snkBoardsTags/snkBoardsTags.module';
+import { UsersModule } from './apis/users/users.module';
+
+import { ChatModule } from './gateways/chat/chat.module';
+
 @Module({
   imports: [
+    AdminUsersModule,
+    AuthsModule,
+    BuddyBoardsModule,
+    BuddyChatMessagesModule,
+    BuddyChatRoomsModule,
+    FilesModule,
+    IamportsModule,
+    PaymentsModule,
+    ProductsModule,
+    SnkBoardsModule,
+    SnkBoardsImagesModule,
+    SnkBoardsTagsModule,
+    UsersModule,
+    ChatModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
