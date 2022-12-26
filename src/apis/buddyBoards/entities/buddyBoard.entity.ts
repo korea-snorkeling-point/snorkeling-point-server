@@ -19,9 +19,10 @@ export class BuddyBoard {
   @Field(() => String)
   id: string;
 
-  @Column({ nullable: true })
-  @Field(() => [String], { nullable: true })
-  guestIds: string[];
+  // Guest 와 Host 를 Board 안에 어떤 형식으로 저장할 것인가?
+  // @Column({ nullable: true })
+  // @Field(() => [String], { nullable: true })
+  // guestIds: string[];
 
   @Column()
   @Field(() => String)

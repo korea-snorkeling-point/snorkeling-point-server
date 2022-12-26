@@ -4,9 +4,6 @@ import { Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { Payment } from './entities/payment.entity';
 
-/**
- * Payment Service
- */
 @Injectable()
 export class PaymentsService {
   constructor(

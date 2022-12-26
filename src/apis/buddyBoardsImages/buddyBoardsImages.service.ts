@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { SnkBoard } from '../snkBoards/entities/snkBoard.entity';
-import { SnkBoardImage } from './entities/buddyBoardImage.entity';
+import { BuddyBoard } from '../buddyBoards/entities/buddyBoard.entity';
+import { BuddyBoardImage } from './entities/buddyBoardImage.entity';
 
 @Injectable()
-export class SnkBoardImagesService {
+export class BuddyBoardImagesService {
   constructor(
-    @InjectRepository(SnkBoardImage)
-    private readonly snkBoardImagesRepository: Repository<SnkBoardImage>,
+    @InjectRepository(BuddyBoardImage)
+    private readonly buddyBoardImagesRepository: Repository<BuddyBoardImage>,
 
-    @InjectRepository(SnkBoard)
-    private readonly dogsRepository: Repository<SnkBoard>,
+    @InjectRepository(BuddyBoard)
+    private readonly dogsRepository: Repository<BuddyBoard>,
   ) {}
 }

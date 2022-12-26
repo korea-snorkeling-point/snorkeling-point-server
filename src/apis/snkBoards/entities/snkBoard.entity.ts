@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { AddrOne } from 'src/apis/addrOnes/entities/addrOne.entity';
 import { AddrTwo } from 'src/apis/addrTwos/entities/addrTwo.entity';
 import { BuddyBoard } from 'src/apis/buddyBoards/entities/buddyBoard.entity';
@@ -6,7 +6,6 @@ import { SnkBoardImage } from 'src/apis/snkBoardsImages/entities/snkBoardImage.e
 import { SnkBoardTag } from 'src/apis/snkBoardsTags/entities/snkBoardTag.entity';
 import {
   Column,
-  Double,
   Entity,
   JoinColumn,
   JoinTable,
@@ -39,12 +38,13 @@ export class SnkBoard {
   @Field(() => String)
   addrDetail: string;
 
-  @Column()
-  @Field(() => Double)
+  // location 을 따로 table 분리해야 할지 여부 고려
+  @Column({ type: 'double' })
+  @Field(() => Float)
   lat: number;
 
-  @Column()
-  @Field(() => Double)
+  @Column({ type: 'double' })
+  @Field(() => Float)
   lng: number;
 
   // SnkBoard : BuddyBoard - 1 : N 관계
