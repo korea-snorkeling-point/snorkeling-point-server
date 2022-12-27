@@ -5,7 +5,9 @@
     "Kakao",
     "Naver",
     "nestjs",
+    "snkpointchats",
     "typeorm",
+    "uuidv4",
     "websockets"
   ],
   "editor.formatOnSave": true,
