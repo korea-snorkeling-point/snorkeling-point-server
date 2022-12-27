@@ -1,4 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { BuddyBoard } from 'src/apis/buddyBoards/entities/buddyBoard.entity';
+import { BuddyParty } from 'src/apis/buddyParties/entities/buddyParty.entity';
 import { Payment } from 'src/apis/payments/entities/payment.entity';
 import {
   Entity,
@@ -42,4 +44,8 @@ export class User {
   @OneToMany(() => Payment, (payments) => payments.user)
   @Field(() => [Payment])
   payments: Payment[];
+
+  @OneToMany(() => BuddyParty, (buddyParties) => buddyParties.user)
+  @Field(() => [BuddyParty])
+  buddyParties: BuddyParty[];
 }

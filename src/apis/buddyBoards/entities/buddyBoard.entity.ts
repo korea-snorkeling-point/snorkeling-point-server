@@ -1,7 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { BuddyBoardImage } from 'src/apis/buddyBoardsImages/entities/buddyBoardImage.entity';
 import { BuddyChatRoom } from 'src/apis/buddyChatRooms/entities/buddyChatRoom.entity';
+import { BuddyParty } from 'src/apis/buddyParties/entities/buddyParty.entity';
 import { SnkBoard } from 'src/apis/snkBoards/entities/snkBoard.entity';
+import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
   Entity,
@@ -50,7 +52,7 @@ export class BuddyBoard {
   @Field(() => SnkBoard)
   snkBoard: SnkBoard;
 
-  // BuddyBoard : BuddyChatRoom - 1:1 연결
+  // BuddyBoard : BuddyChatRoom - 1:1 관계
   @OneToOne(() => BuddyChatRoom, (buddyChatRoom) => buddyChatRoom.buddyBoard)
   @Field(() => BuddyChatRoom)
   buddyChatRoom: BuddyChatRoom;
@@ -65,4 +67,9 @@ export class BuddyBoard {
   )
   @Field(() => [BuddyBoardImage])
   buddyBoardImages: BuddyBoardImage[];
+
+  // BuddyBoard : BuddyParty - 1 : N 관계
+  @ManyToOne(() => BuddyParty, (buddyParties) => buddyParties.buddyBoard)
+  @Field(() => [BuddyParty])
+  buddyParties: BuddyParty[];
 }

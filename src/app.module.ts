@@ -13,6 +13,7 @@ import { AuthsModule } from './apis/auths/auths.module';
 import { BuddyBoardsModule } from './apis/buddyBoards/buddyBoards.module';
 import { BuddyChatMessagesModule } from './apis/buddyChatMessages/buddyChatMessages.module';
 import { BuddyChatRoomsModule } from './apis/buddyChatRooms/buddyChatRooms.module';
+import { BuddyPartiesModule } from './apis/buddyParties/buddyParties.module';
 import { FilesModule } from './apis/files/files.module';
 import { IamportsModule } from './apis/imports/imports.module';
 import { PaymentsModule } from './apis/payments/payments.module';
@@ -31,6 +32,7 @@ import { ChatModule } from './gateways/chat/chat.module';
     BuddyBoardsModule,
     BuddyChatMessagesModule,
     BuddyChatRoomsModule,
+    BuddyPartiesModule,
     FilesModule,
     IamportsModule,
     PaymentsModule,
