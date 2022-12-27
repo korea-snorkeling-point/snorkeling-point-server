@@ -1,9 +1,10 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { BuddyBoardComment } from 'src/apis/buddyBoardsComments/entities/buddyBoardComment.entity';
 import { BuddyBoardImage } from 'src/apis/buddyBoardsImages/entities/buddyBoardImage.entity';
 import { BuddyChatRoom } from 'src/apis/buddyChatRooms/entities/buddyChatRoom.entity';
 import { BuddyParty } from 'src/apis/buddyParties/entities/buddyParty.entity';
 import { SnkBoard } from 'src/apis/snkBoards/entities/snkBoard.entity';
-import { User } from 'src/apis/users/entities/user.entity';
+
 import {
   Column,
   Entity,
@@ -20,11 +21,6 @@ export class BuddyBoard {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
-
-  // Guest 와 Host 를 Board 안에 어떤 형식으로 저장할 것인가?
-  // @Column({ nullable: true })
-  // @Field(() => [String], { nullable: true })
-  // guestIds: string[];
 
   @Column()
   @Field(() => String)
@@ -61,15 +57,20 @@ export class BuddyBoard {
   @OneToMany(
     () => BuddyBoardImage,
     (buddyBoardImages) => buddyBoardImages.buddyBoard,
-    {
-      cascade: true,
-    },
   )
   @Field(() => [BuddyBoardImage])
   buddyBoardImages: BuddyBoardImage[];
 
   // BuddyBoard : BuddyParty - 1 : N 관계
-  @ManyToOne(() => BuddyParty, (buddyParties) => buddyParties.buddyBoard)
+  @OneToMany(() => BuddyParty, (buddyParties) => buddyParties.buddyBoard)
   @Field(() => [BuddyParty])
   buddyParties: BuddyParty[];
+
+  // BuddyBoard : BuddyBoardComment - 1 : N 관계
+  @OneToMany(
+    () => BuddyBoardComment,
+    (buddyBoardComments) => buddyBoardComments.buddyBoard,
+  )
+  @Field(() => [BuddyBoardComment])
+  buddyBoardComments: BuddyBoardComment[];
 }

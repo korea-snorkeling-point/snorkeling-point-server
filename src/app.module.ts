@@ -11,6 +11,9 @@ import { AppController } from './app.controller';
 import { AdminUsersModule } from './apis/adminUsers/adminUsers.module';
 import { AuthsModule } from './apis/auths/auths.module';
 import { BuddyBoardsModule } from './apis/buddyBoards/buddyBoards.module';
+import { BuddyBoardsCommentsModule } from './apis/buddyBoardsComments/buddyBoardsComments.module';
+import { BuddyBoardsImagesModule } from './apis/buddyBoardsImages/buddyBoardsImages.module';
+import { BuddyBoardsSubCommentsModule } from './apis/buddyBoardsSubComments/buddyBoardsSubComments.module';
 import { BuddyChatMessagesModule } from './apis/buddyChatMessages/buddyChatMessages.module';
 import { BuddyChatRoomsModule } from './apis/buddyChatRooms/buddyChatRooms.module';
 import { BuddyPartiesModule } from './apis/buddyParties/buddyParties.module';
@@ -19,7 +22,9 @@ import { IamportsModule } from './apis/imports/imports.module';
 import { PaymentsModule } from './apis/payments/payments.module';
 import { ProductsModule } from './apis/products/products.module';
 import { SnkBoardsModule } from './apis/snkBoards/snkBoards.module';
+import { SnkBoardsBookMarksModule } from './apis/snkBoardsBookMarks/snkBoardsBookMarks.module';
 import { SnkBoardsImagesModule } from './apis/snkBoardsImages/snkBoardsImages.module';
+import { SnkBoardsLikesModule } from './apis/snkBoardsLikes/snkBoardsLikes.module';
 import { SnkBoardsTagsModule } from './apis/snkBoardsTags/snkBoardsTags.module';
 import { UsersModule } from './apis/users/users.module';
 
@@ -30,6 +35,9 @@ import { ChatModule } from './gateways/chat/chat.module';
     AdminUsersModule,
     AuthsModule,
     BuddyBoardsModule,
+    BuddyBoardsCommentsModule,
+    BuddyBoardsImagesModule,
+    BuddyBoardsSubCommentsModule,
     BuddyChatMessagesModule,
     BuddyChatRoomsModule,
     BuddyPartiesModule,
@@ -38,7 +46,9 @@ import { ChatModule } from './gateways/chat/chat.module';
     PaymentsModule,
     ProductsModule,
     SnkBoardsModule,
+    SnkBoardsBookMarksModule,
     SnkBoardsImagesModule,
+    SnkBoardsLikesModule,
     SnkBoardsTagsModule,
     UsersModule,
     ChatModule,

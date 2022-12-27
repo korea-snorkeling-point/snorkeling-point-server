@@ -11,6 +11,6 @@ export class BuddyBoardImagesService {
     private readonly buddyBoardImagesRepository: Repository<BuddyBoardImage>,
 
     @InjectRepository(BuddyBoard)
-    private readonly dogsRepository: Repository<BuddyBoard>,
+    private readonly buddyBoardRepository: Repository<BuddyBoard>,
   ) {}
 }
