@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { BuddyChatRoom } from 'src/apis/buddyChatRooms/entities/buddyChatRoom.entity';
+import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -36,6 +37,20 @@ export class BuddyChatMessage {
   // BuddyChatMessage : BuddyChatroom - N:1 연결
   @JoinColumn()
   @Field(() => BuddyChatRoom)
-  @ManyToOne(() => BuddyChatRoom, { onDelete: 'CASCADE' })
+  @ManyToOne(
+    () => BuddyChatRoom,
+    (buddyChatRoom) => buddyChatRoom.buddyChatMessages,
+    { onDelete: 'CASCADE' },
+  )
   buddyChatRoom: BuddyChatRoom;
+
+  // BuddyChatMessage : User - N:1 연결
+  @JoinColumn()
+  @Field(() => User)
+  @ManyToOne(
+    () => User,
+    (user) => user.buddyChatMessages,
+    { onDelete: 'CASCADE' }, //
+  )
+  user: User;
 }

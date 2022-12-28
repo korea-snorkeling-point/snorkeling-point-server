@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
@@ -15,7 +16,11 @@ export class Product {
 
   @Column()
   @Field(() => String)
-  productName: string;
+  title: string;
+
+  @Column()
+  @Field(() => String)
+  description: string;
 
   @Column({ default: 0 })
   @Field(() => Int)
@@ -23,9 +28,24 @@ export class Product {
 
   @Column()
   @Field(() => String)
-  description: string;
+  address: string;
+
+  @Column({ default: false })
+  @Field(() => Boolean)
+  isSold: boolean;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 
   @DeleteDateColumn()
   @Field(() => Date)
   deletedAt: Date;
+
+  // Product : User - N : 1 관계
+  // Product : ProductCategory - N : 1 관계
+
+  // Product : ProductLike - 1 : N 관계
+  // Product : ProductChatRoom - 1 : N 관계
+  // Product : ProductImg - 1 : N 관계
 }

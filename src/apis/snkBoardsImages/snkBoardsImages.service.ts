@@ -11,6 +11,6 @@ export class SnkBoardImagesService {
     private readonly snkBoardImagesRepository: Repository<SnkBoardImage>,
 
     @InjectRepository(SnkBoard)
-    private readonly dogsRepository: Repository<SnkBoard>,
+    private readonly snkBoardsRepository: Repository<SnkBoard>,
   ) {}
 }

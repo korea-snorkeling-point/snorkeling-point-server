@@ -3,6 +3,8 @@ import { AddrOne } from 'src/apis/addrOnes/entities/addrOne.entity';
 import { AddrTwo } from 'src/apis/addrTwos/entities/addrTwo.entity';
 import { BuddyBoard } from 'src/apis/buddyBoards/entities/buddyBoard.entity';
 import { SnkBoardImage } from 'src/apis/snkBoardsImages/entities/snkBoardImage.entity';
+import { SnkBoardLike } from 'src/apis/snkBoardsLikes/entities/snkBoardLike.entity';
+import { SnkBoardBookMark } from 'src/apis/snkBoardsBookMarks/entities/snkBoardBookMark.entity';
 import { SnkBoardTag } from 'src/apis/snkBoardsTags/entities/snkBoardTag.entity';
 import {
   Column,
@@ -38,7 +40,6 @@ export class SnkBoard {
   @Field(() => String)
   addrDetail: string;
 
-  // location 을 따로 table 분리해야 할지 여부 고려
   @Column({ type: 'double' })
   @Field(() => Float)
   lat: number;
@@ -46,13 +47,6 @@ export class SnkBoard {
   @Column({ type: 'double' })
   @Field(() => Float)
   lng: number;
-
-  // SnkBoard : BuddyBoard - 1 : N 관계
-  @OneToMany(() => BuddyBoard, (buddyBoards) => buddyBoards.snkBoard, {
-    cascade: true,
-  })
-  @Field(() => [BuddyBoard])
-  buddyBoards: BuddyBoard[];
 
   // SnkBoard : AddrOne - N : 1 관계
   @JoinColumn()
@@ -66,6 +60,13 @@ export class SnkBoard {
   @Field(() => AddrTwo)
   addrTwo: AddrTwo;
 
+  // SnkBoard : BuddyBoard - 1 : N 관계
+  @OneToMany(() => BuddyBoard, (buddyBoards) => buddyBoards.snkBoard, {
+    cascade: true,
+  })
+  @Field(() => [BuddyBoard])
+  buddyBoards: BuddyBoard[];
+
   // SnkBoard : SnkBoardImage - 1 : N 관계
   @OneToMany(() => SnkBoardImage, (snkBoardImage) => snkBoardImage.snkBoard, {
     cascade: true,
@@ -73,7 +74,20 @@ export class SnkBoard {
   @Field(() => [SnkBoardImage])
   snkBoardImages: SnkBoardImage[];
 
-  // SnkBoard : SnkBoardTag - M : N 연결
+  // SnkBoard : SnkBoardLike - 1 : N 관계
+  @OneToMany(() => SnkBoardLike, (snkBoardLikes) => snkBoardLikes.user)
+  @Field(() => [SnkBoardLike])
+  snkBoardLikes: SnkBoardLike[];
+
+  // SnkBoard : SnkBoardBookMark - 1 : N 관계
+  @OneToMany(
+    () => SnkBoardBookMark,
+    (snkBoardBookMarks) => snkBoardBookMarks.user,
+  )
+  @Field(() => [SnkBoardBookMark])
+  snkBoardBookMarks: SnkBoardBookMark[];
+
+  // SnkBoard : SnkBoardTag - M : N 관계
   @JoinTable()
   @Field(() => [SnkBoardTag])
   @ManyToMany(() => SnkBoardTag, (snkBoardTags) => snkBoardTags.snkBoards, {
