@@ -10,4 +10,7 @@ export class CreateUserInput {
 
   @Field(() => String, { nullable: true })
   nickname: string;
+
+  @Field(() => String)
+  gender: string;
 }

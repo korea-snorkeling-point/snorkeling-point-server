@@ -28,6 +28,10 @@ export class User {
   @Field(() => String)
   nickname: string;
 
+  @Column()
+  @Field(() => String)
+  gender: string;
+
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;
