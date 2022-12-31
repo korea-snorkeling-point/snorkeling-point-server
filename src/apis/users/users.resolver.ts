@@ -15,6 +15,12 @@ export class UsersResolver {
     return this.usersService.findAll();
   }
 
+  @Query(() => User, { description: '회원 한명 조회' })
+  async fetchOneUser(
+    @Args('email', { description: '가입한 이메일 정보' }) email: string, //
+  ) {
+    return this.usersService.findOne({ email });
+  }
   @Mutation(() => User, { description: '회원가입' })
   async createUser(
     @Args('createUserInput', { description: '회원 가입 정보 입력' })
