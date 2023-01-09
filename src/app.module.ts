@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
-
+import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { AppController } from './app.controller';
 
 // apis
@@ -29,6 +29,7 @@ import { SnkBoardsTagsModule } from './apis/snkBoardsTags/snkBoardsTags.module';
 import { UsersModule } from './apis/users/users.module';
 
 import { ChatModule } from './gateways/chat/chat.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -82,6 +83,27 @@ import { ChatModule } from './gateways/chat/chat.module';
       store: redisStore,
       url: process.env.CACHE_REDIS_URL,
       isGlobal: true,
+    }),
+    // Mailer 사용을 위한 MailerModule 추가
+    MailerModule.forRoot({
+      transport: {
+        service: 'gmail',
+        secure: false,
+        auth: {
+          user: process.env.MAILER_GMAIL_USER,
+          pass: process.env.MAILER_GMAIL_PASS,
+        },
+      },
+      defaults: {
+        from: process.env.MAILER_GMAIL_SENDER,
+      },
+      template: {
+        dir: __dirname + '/commons/mailTemplates',
+        adapter: new PugAdapter(),
+        options: {
+          strict: true,
+        },
+      },
     }),
   ],
   controllers: [AppController],
