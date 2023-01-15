@@ -36,10 +36,6 @@ export class SnkBoard {
   @Field(() => String)
   description: string;
 
-  @Column()
-  @Field(() => String)
-  addrDetail: string;
-
   @Column({ type: 'double' })
   @Field(() => Float)
   lat: number;
@@ -48,17 +44,24 @@ export class SnkBoard {
   @Field(() => Float)
   lng: number;
 
+  // 대분류 (시/도)
   // SnkBoard : AddrOne - N : 1 관계
   @JoinColumn()
   @ManyToOne(() => AddrOne, (addrOne) => addrOne.snkBoards)
   @Field(() => AddrOne)
   addrOne: AddrOne;
 
+  // 소분류 (시/군/구)
   // SnkBoard : addrTwo - N : 1 관계
   @JoinColumn()
   @ManyToOne(() => AddrTwo, (addrTwo) => addrTwo.snkBoards)
   @Field(() => AddrTwo)
   addrTwo: AddrTwo;
+
+  // 나머지 주소
+  @Column()
+  @Field(() => String)
+  addrDetail: string;
 
   // SnkBoard : BuddyBoard - 1 : N 관계
   @OneToMany(() => BuddyBoard, (buddyBoards) => buddyBoards.snkBoard, {
