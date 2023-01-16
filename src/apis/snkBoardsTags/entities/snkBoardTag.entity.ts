@@ -11,7 +11,7 @@ export class SnkBoardTag {
 
   @Column()
   @Field(() => String)
-  tag: string;
+  name: string;
 
   // SnkBoardTag : SnkBoard - N : M 연결
   @Field(() => [SnkBoard])

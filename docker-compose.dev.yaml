@@ -1,12 +1,12 @@
 version: '3.7'
 
 services:
-  snklpoint-backend:
+  snkpoint-backend:
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./src:/snklpoint/src
+      - ./src:/snkpoint/src
     ports:
       - 3000:3000
     env_file:
@@ -14,21 +14,21 @@ services:
     environment:
       - TZ=Asia/Seoul
 
-  snklpoint-database:
+  snkpoint-database:
     platform: linux/x86_64
     image: mysql:latest
     environment:
-      MYSQL_DATABASE: 'snklpoint'
+      MYSQL_DATABASE: 'snkpoint'
       MYSQL_ROOT_PASSWORD: 'root'
       TZ: Asia/Seoul
     ports:
       # For Deploy On VM Instance
-      # - 1328:3306
+      - 1328:3306
       # For Dev On Localhost
-      - 3306:3306
+      # - 3306:3306
 
   # Redis
-  snklpoint-redis:
+  snkpoint-redis:
     image: redis:latest
     ports:
       - 6379:6379

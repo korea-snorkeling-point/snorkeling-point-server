@@ -1,9 +1,9 @@
 FROM node:14
 
-WORKDIR /snklpoint/
-COPY ./package.json /snklpoint/
-COPY ./yarn.lock /snklpoint/
+WORKDIR /snkpoint/
+COPY ./package.json /snkpoint/
+COPY ./yarn.lock /snkpoint/
 RUN yarn install
 
-COPY . /snklpoint/
+COPY . /snkpoint/
 CMD yarn start:dev
