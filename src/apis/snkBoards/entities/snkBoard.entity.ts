@@ -8,6 +8,8 @@ import { SnkBoardBookMark } from 'src/apis/snkBoardsBookMarks/entities/snkBoardB
 import { SnkBoardTag } from 'src/apis/snkBoardsTags/entities/snkBoardTag.entity';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -15,6 +17,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -27,10 +30,6 @@ export class SnkBoard {
   @Column()
   @Field(() => String)
   title: string;
-
-  @Column()
-  @Field(() => String)
-  subTitle: string;
 
   @Column()
   @Field(() => String)
@@ -97,4 +96,13 @@ export class SnkBoard {
     cascade: true,
   })
   snkBoardTags: SnkBoardTag[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
