@@ -14,7 +14,7 @@ export class AdminUser {
   @Field(() => String)
   id: string;
 
-  @Column({ unique: true })
+  @Column()
   @Field(() => String)
   account: string;
 
