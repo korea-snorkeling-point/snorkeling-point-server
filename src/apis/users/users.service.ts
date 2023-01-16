@@ -21,8 +21,7 @@ export class UsersService {
       where: { email: email },
       relations: { payments: true },
     });
-    if (!result)
-      throw new ConflictException('해당 이메일로 가입한 회원 정보가 없습니다.');
+
     return result;
   }
 

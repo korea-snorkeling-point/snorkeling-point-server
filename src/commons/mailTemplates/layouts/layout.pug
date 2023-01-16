@@ -1,0 +1,15 @@
+doctype html
+html
+  head 
+    style
+      include styles.css
+  body
+    block header
+      #header
+        include header.pug
+  p 반가워요👋
+  p 저희 <span class = "snk">Snorkeling-point</span>🌊 에서 버디를 만나 즐거운 시간을 보내보세요!
+  p 발급된 메일 인증 코드는 다음과 같습니다.
+  div(class="code") 인증 번호 : <span class = "num">#{code} </span>
+  p 발급된 코드를 회원가입 양식에 입력해주세요.
+  p 인증번호는 <span>3분간</span> 유효합니다
