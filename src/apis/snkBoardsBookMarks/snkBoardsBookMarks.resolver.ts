@@ -25,7 +25,7 @@ export class SnkBoardsBookMarksResolver {
   }
 
   @Query(() => Boolean, { description: 'Return : 해당 Board의 유저 BookMark 여부' })
-  fetchSnkBookMarks(
+  fetchSnkBookMark(
     @Args('userId', { description: '사용자 id' }) userId: string,
     @Args('snkBoardId', { description: 'snkBoard id' }) snkBoardId: string,
   ) {

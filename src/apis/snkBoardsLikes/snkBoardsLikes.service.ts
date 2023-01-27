@@ -21,6 +21,24 @@ export class SnkBoardsLikesService {
     throw new Error('아직 구현되지 않았습니다.');
   }
 
+  async findLikedBoards({ userId }) {
+    const result = await this.snkBoardsRepository.find({
+      where: { snkBoardLikes: { user: { id: userId } } },
+      relations: {
+        addrOne: true,
+        addrTwo: true,
+        snkBoardTags: true,
+        snkBoardImages: true,
+        snkBoardLikes: true,
+        snkBoardBookMarks: true,
+        buddyBoards: true
+      },
+      order: { snkBoardImages: {isMain: 'DESC'} },
+    });
+
+    return result;
+  }
+
   async findAll({ userId }) {
     const result = await this.snkBoardsLikesRepository.find({
       where: { user: { id: userId } },

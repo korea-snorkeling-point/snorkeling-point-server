@@ -15,6 +15,13 @@ export class SnkBoardsLikesResolver {
     return this.snkBoardsLikesService.findTopFiveBoards();
   }
 
+  @Query(() => [SnkBoard], { description: 'Return : User가 Like한 SnkBoards' })
+  fetchLikedSnkBoards(
+    @Args('userId', { description: '사용자 id' }) userId: string,
+  ){
+    return this.snkBoardsLikesService.findLikedBoards({ userId });
+  }
+
   @Query(() => [SnkBoardLike], { description: 'Return : User의 모든 SnkboardLike'})
   fetchUserSnkLikes(
     @Args('userId', { description: '사용자 id' }) userId: string,
