@@ -3,10 +3,13 @@ import { SnkBoard } from 'src/apis/snkBoards/entities/snkBoard.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -15,10 +18,6 @@ export class SnkBoardBookMark {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
   id: string;
-
-  @Column()
-  @Field(() => String)
-  role: string;
 
   // SnkBoardBookMarks : User - N : 1 연결
   @JoinColumn()
@@ -31,4 +30,16 @@ export class SnkBoardBookMark {
   @Field(() => SnkBoard)
   @ManyToOne(() => SnkBoard, (snkBoard) => snkBoard.snkBoardBookMarks)
   snkBoard: SnkBoard;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Field(() => Date)
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 }

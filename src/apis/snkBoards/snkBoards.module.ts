@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AddrOne } from '../addrOnes/entities/addrOne.entity';
 import { AddrTwo } from '../addrTwos/entities/addrTwo.entity';
 import { SnkBoardImage } from '../snkBoardsImages/entities/snkBoardImage.entity';
+import { SnkBoardLike } from '../snkBoardsLikes/entities/snkBoardLike.entity';
 import { SnkBoardTag } from '../snkBoardsTags/entities/snkBoardTag.entity';
 import { SnkBoard } from './entities/snkBoard.entity';
 import { SnkBoardsResolver } from './snkBoards.resolver';

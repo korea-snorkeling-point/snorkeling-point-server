@@ -151,6 +151,7 @@ export class SnkBoardsService {
         return result; // 생성된 데이터 정보 리턴
     }
 
+    // snkBoard 수정 - 작업중
     async update({ snkBoardId, updateSnkBoardInput }) {
         const {
             addrOne,
@@ -178,6 +179,7 @@ export class SnkBoardsService {
     }
 
 
+    // softDelete
     async delete({ snkBoardId }) {
         const result = await this.snkBoardsRepository.softDelete({ id : snkBoardId });
         return result.affected ? true : false;
