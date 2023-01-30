@@ -4,6 +4,8 @@ import { BuddyBoardSubComment } from 'src/apis/buddyBoardsSubComments/entities/b
 import { BuddyChatMessage } from 'src/apis/buddyChatMessages/entities/buddyChatMessage.entity';
 import { BuddyParty } from 'src/apis/buddyParties/entities/buddyParty.entity';
 import { Payment } from 'src/apis/payments/entities/payment.entity';
+import { Product } from 'src/apis/products/entities/product.entity';
+import { ProductLike } from 'src/apis/productsLikes/entities/productLike.entity';
 import { SnkBoardBookMark } from 'src/apis/snkBoardsBookMarks/entities/snkBoardBookMark.entity';
 import { SnkBoardLike } from 'src/apis/snkBoardsLikes/entities/snkBoardLike.entity';
 import {
@@ -99,4 +101,14 @@ export class User {
   )
   @Field(() => [SnkBoardBookMark])
   snkBoardBookMarks: SnkBoardBookMark[];
+
+  // User : Product - 1 : N 관계
+  @OneToMany(() => Product, (product) => product.user)
+  @Field(() => [Product])
+  product: Product[];
+
+  // User : ProductLike - 1 : N 관계
+  @OneToMany(() => ProductLike, (productLike) => productLike.user)
+  @Field(() => [ProductLike])
+  productLikes: ProductLike[];
 }
