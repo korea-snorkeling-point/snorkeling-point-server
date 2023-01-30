@@ -30,6 +30,9 @@ import { UsersModule } from './apis/users/users.module';
 
 import { ChatModule } from './gateways/chat/chat.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { ProductCategoriesModule } from './apis/productCategories/productCategories.module';
+import { ProductsImagesModule } from './apis/productsImages/productsImages.module';
+import { ProductsLikesModule } from './apis/productsLikes/productsLikes.module';
 
 @Module({
   imports: [
@@ -46,6 +49,9 @@ import { MailerModule } from '@nestjs-modules/mailer';
     IamportsModule,
     PaymentsModule,
     ProductsModule,
+    ProductCategoriesModule,
+    ProductsImagesModule,
+    ProductsLikesModule,
     SnkBoardsModule,
     SnkBoardsBookMarksModule,
     SnkBoardsImagesModule,

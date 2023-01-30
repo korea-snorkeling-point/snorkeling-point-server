@@ -9,177 +9,168 @@ import { SnkBoard } from './entities/snkBoard.entity';
 
 @Injectable()
 export class SnkBoardsService {
-    constructor(
-        @InjectRepository(SnkBoard)
-        private readonly snkBoardsRepository: Repository<SnkBoard>, //
+  constructor(
+    @InjectRepository(SnkBoard)
+    private readonly snkBoardsRepository: Repository<SnkBoard>, //
 
-        @InjectRepository(AddrOne)
-        private readonly addrOnesRepository: Repository<AddrOne>,
+    @InjectRepository(AddrOne)
+    private readonly addrOnesRepository: Repository<AddrOne>,
 
-        @InjectRepository(AddrTwo)
-        private readonly addrTwosRepository: Repository<AddrTwo>,
+    @InjectRepository(AddrTwo)
+    private readonly addrTwosRepository: Repository<AddrTwo>,
 
-        @InjectRepository(SnkBoardImage)
-        private readonly snkBoardImagesRepository: Repository<SnkBoardImage>,
+    @InjectRepository(SnkBoardImage)
+    private readonly snkBoardImagesRepository: Repository<SnkBoardImage>,
 
-        @InjectRepository(SnkBoardTag)
-        private readonly snkBoardTagsRepository: Repository<SnkBoardTag>,
-    ) {}
+    @InjectRepository(SnkBoardTag)
+    private readonly snkBoardTagsRepository: Repository<SnkBoardTag>,
+  ) {}
 
-    async findOne({snkBoardId}) {
-        return await this.snkBoardsRepository.findOne({
-            where: { id: snkBoardId },
-            relations: {
-                addrOne: true,
-                addrTwo: true,
-                snkBoardTags: true,
-                snkBoardImages: true,
-                snkBoardLikes: true,
-                snkBoardBookMarks: true,
-                buddyBoards: true
-            },
-            order: { snkBoardImages: {isMain: 'DESC'} },
-        })
+  async findOne({ snkBoardId }) {
+    return await this.snkBoardsRepository.findOne({
+      where: { id: snkBoardId },
+      relations: {
+        addrOne: true,
+        addrTwo: true,
+        snkBoardTags: true,
+        snkBoardImages: true,
+        snkBoardLikes: true,
+        snkBoardBookMarks: true,
+        buddyBoards: true,
+      },
+      order: { snkBoardImages: { isMain: 'DESC' } },
+    });
+  }
+
+  async findAll({ page }) {
+    return await this.snkBoardsRepository.find({
+      skip: page ? (page - 1) * 50 : 0, // page당 50개씩 조회
+      take: 50,
+      relations: {
+        addrOne: true,
+        addrTwo: true,
+        snkBoardTags: true,
+        snkBoardImages: true,
+        snkBoardLikes: true,
+        snkBoardBookMarks: true,
+        buddyBoards: true,
+      },
+      order: { snkBoardImages: { isMain: 'DESC' } },
+    });
+  }
+
+  searchAll({ page, addrOne, addrTwo, titleSearch }) {
+    return '검색기능은 아직 구현되지 않았습니다.';
+  }
+
+  async create({ createSnkBoardInput }) {
+    const { addrOne, addrTwo, snkBoardImages, snkBoardTags, ...snkBoard } =
+      createSnkBoardInput;
+
+    // 1. addrOne, addrTwo 불러오기 (없으면 생성)
+    let addrOneInfo: AddrOne;
+    const checkAddrOne = await this.addrOnesRepository.findOne({
+      where: { addr: addrOne },
+    });
+    if (checkAddrOne) addrOneInfo = checkAddrOne;
+    else {
+      const newAddrOne = await this.addrOnesRepository.save({
+        addr: addrOne,
+      });
+      addrOneInfo = newAddrOne;
     }
 
-    async findAll({page}) {
-        return await this.snkBoardsRepository.find({
-            skip: page ? (page-1) * 50 : 0, // page당 50개씩 조회
-            take: 50,
-            relations: {
-                addrOne: true,
-                addrTwo: true,
-                snkBoardTags: true,
-                snkBoardImages: true,
-                snkBoardLikes: true,
-                snkBoardBookMarks: true,
-                buddyBoards: true
-            },
-            order: { snkBoardImages: {isMain: 'DESC'} },
-        });
+    let addrTwoInfo: AddrTwo;
+    const checkAddrTwo = await this.addrTwosRepository.findOne({
+      where: { addr: addrTwo },
+    });
+    if (checkAddrTwo) addrTwoInfo = checkAddrTwo;
+    else {
+      const newAddrTwo = await this.addrTwosRepository.save({
+        addr: addrTwo,
+      });
+      addrTwoInfo = newAddrTwo;
     }
 
-    searchAll({page, addrOne, addrTwo, titleSearch}) {
-        return '검색기능은 아직 구현되지 않았습니다.'
-    }
+    // 2. snkBoardTags 모두 등록하기
+    const createdTags = await Promise.all(
+      snkBoardTags.map(
+        (tagName: string) =>
+          new Promise(async (resolve, reject) => {
+            try {
+              const prevTag = await this.snkBoardTagsRepository.findOne({
+                where: { name: tagName },
+              });
+              if (prevTag) {
+                resolve(prevTag);
+              } else {
+                const newTag = await this.snkBoardTagsRepository.save({
+                  name: tagName,
+                });
+                resolve(newTag);
+              }
+            } catch (e) {
+              reject(e);
+            }
+          }),
+      ),
+    );
 
-    async create({ createSnkBoardInput }) {
-        const {
-            addrOne,
-            addrTwo,
-            snkBoardImages,
-            snkBoardTags,
-            ...snkBoard
-        } = createSnkBoardInput;
-        
-        // 1. addrOne, addrTwo 불러오기 (없으면 생성)
-        let addrOneInfo: AddrOne;
-        const checkAddrOne = await this.addrOnesRepository.findOne({
-            where: { addr: addrOne },
-        });
-        if (checkAddrOne) addrOneInfo = checkAddrOne;
-        else {
-            const newAddrOne = await this.addrOnesRepository.save({
-                addr: addrOne,
-            });
-            addrOneInfo = newAddrOne;
-        }
+    // 3. snkBoard 정보 저장
+    const result = await this.snkBoardsRepository.save({
+      ...snkBoard,
+      addrOne: { id: addrOneInfo.id }, // N:1 관계 데이터 연결
+      addrTwo: { id: addrTwoInfo.id }, // N:1 관계 데이터 연결
+      snkBoardTags: createdTags, // N:M 관계 데이터는 둘 중 하나만 연결하면 된다.
+    });
 
-        let addrTwoInfo: AddrTwo;
-        const checkAddrTwo = await this.addrTwosRepository.findOne({
-            where: { addr: addrTwo },
-        });
-        if (checkAddrTwo) addrTwoInfo = checkAddrTwo;
-        else {
-            const newAddrTwo = await this.addrTwosRepository.save({
-                addr: addrTwo,
-            });
-            addrTwoInfo = newAddrTwo;
-        }
+    // 4. 이미지 생성 후 연결하기
+    await Promise.all(
+      snkBoardImages.map(
+        (img: any, idx: number) =>
+          new Promise(async (resolve, reject) => {
+            try {
+              const isMain = idx === 0 ? true : false;
+              const newImg = await this.snkBoardImagesRepository.save({
+                img,
+                isMain,
+                snkBoard: { id: result.id }, // 1:N 관계 데이터 연결
+              });
+              resolve(newImg);
+            } catch (e) {
+              reject(e);
+            }
+          }),
+      ),
+    );
+    return result; // 생성된 데이터 정보 리턴
+  }
 
-        // 2. snkBoardTags 모두 등록하기
-        const createdTags = await Promise.all(
-            snkBoardTags.map(
-                (tagName: string) =>
-                    new Promise(async (resolve, reject) => {
-                        try {
-                            const prevTag = await this.snkBoardTagsRepository.findOne({
-                                where: { name: tagName },
-                            });
-                            if (prevTag) {
-                                resolve(prevTag);
-                            } else {
-                                const newTag = await this.snkBoardTagsRepository.save({
-                                    name: tagName,
-                                });
-                                resolve(newTag);
-                            }
-                        } catch (e) {
-                            reject(e);
-                        }
-                    }),
-            ),
-        );
+  async update({ snkBoardId, updateSnkBoardInput }) {
+    const { addrOne, addrTwo, snkBoardImages, snkBoardTags, ...snkBoard } =
+      updateSnkBoardInput;
 
-        // 3. snkBoard 정보 저장
-        const result = await this.snkBoardsRepository.save({
-            ...snkBoard,
-            addrOne: { id: addrOneInfo.id }, // N:1 관계 데이터 연결
-            addrTwo: { id: addrTwoInfo.id }, // N:1 관계 데이터 연결
-            snkBoardTags: createdTags, // N:M 관계 데이터는 둘 중 하나만 연결하면 된다.
-        });
+    const originSnkBoard = await this.snkBoardsRepository.findOne({
+      where: { id: snkBoardId },
+      relations: {
+        addrOne: true,
+        addrTwo: true,
+        snkBoardTags: true,
+        snkBoardImages: true,
+        snkBoardLikes: true,
+        snkBoardBookMarks: true,
+        buddyBoards: true,
+      },
+      order: { snkBoardImages: { isMain: 'DESC' } },
+    });
 
-        // 4. 이미지 생성 후 연결하기
-        await Promise.all(
-            snkBoardImages.map(
-                (img: any, idx: number) =>
-                new Promise(async (resolve, reject) => {
-                    try {
-                        const isMain = idx === 0 ? true : false;
-                        const newImg = await this.snkBoardImagesRepository.save({
-                            img,
-                            isMain,
-                            snkBoard: { id: result.id }, // 1:N 관계 데이터 연결
-                        });
-                        resolve(newImg);
-                    } catch (e) {
-                        reject(e);
-                    }
-                }),
-            ),
-        );
-        return result; // 생성된 데이터 정보 리턴
-    }
+    return originSnkBoard;
+  }
 
-    async update({ snkBoardId, updateSnkBoardInput }) {
-        const {
-            addrOne,
-            addrTwo,
-            snkBoardImages,
-            snkBoardTags,
-            ...snkBoard
-        } = updateSnkBoardInput;
-
-        const originSnkBoard = await this.snkBoardsRepository.findOne({
-            where: { id: snkBoardId },
-            relations: {
-                addrOne: true,
-                addrTwo: true,
-                snkBoardTags: true,
-                snkBoardImages: true,
-                snkBoardLikes: true,
-                snkBoardBookMarks: true,
-                buddyBoards: true
-            },
-            order: { snkBoardImages: {isMain: 'DESC'} },
-        });
-
-        return originSnkBoard;
-    }
-
-
-    async delete({ snkBoardId }) {
-        const result = await this.snkBoardsRepository.softDelete({ id : snkBoardId });
-        return result.affected ? true : false;
-    }
+  async delete({ snkBoardId }) {
+    const result = await this.snkBoardsRepository.softDelete({
+      id: snkBoardId,
+    });
+    return result.affected ? true : false;
+  }
 }
