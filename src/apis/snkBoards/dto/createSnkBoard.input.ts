@@ -6,9 +6,6 @@ export class CreateSnkBoardInput {
   title: string;
 
   @Field(() => String)
-  subTitle: string;
-
-  @Field(() => String)
   description: string;
 
   @Field(() => Float)
