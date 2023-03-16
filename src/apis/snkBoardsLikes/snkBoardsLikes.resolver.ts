@@ -1,6 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { SnkBoard } from '../snkBoards/entities/snkBoard.entity';
+import { User } from '../users/entities/user.entity';
 import { SnkBoardLike } from './entities/snkBoardLike.entity';
 import { SnkBoardsLikesService } from './snkBoardsLikes.service';
 
@@ -10,22 +11,36 @@ export class SnkBoardsLikesResolver {
     private readonly snkBoardsLikesService: SnkBoardsLikesService, //
   ) {}
 
-  @Query(() => [SnkBoard], { description: 'Return : 좋아요 Top Five SnkBoards' })
+  @Query(() => [SnkBoard], {
+    description: 'Return : 좋아요 Top Five SnkBoards',
+  })
   fetchTopFiveSnkBoards() {
     return this.snkBoardsLikesService.findTopFiveBoards();
+  }
+
+  @Query(() => [User], {
+    description: 'Return : SnkBoard에 좋아요를 누른 유저 목록',
+  })
+  fetchWhoLikesBoard(
+    @Args('snkBoardId', { description: '조회할 snkBoard id' })
+    snkBoardId: string,
+  ) {
+    return this.snkBoardsLikesService.findWhoLikesBoard({ snkBoardId });
   }
 
   @Query(() => [SnkBoard], { description: 'Return : User가 Like한 SnkBoards' })
   fetchLikedSnkBoards(
     @Args('userId', { description: '사용자 id' }) userId: string,
-  ){
+  ) {
     return this.snkBoardsLikesService.findLikedBoards({ userId });
   }
 
-  @Query(() => [SnkBoardLike], { description: 'Return : User의 모든 SnkboardLike'})
+  @Query(() => [SnkBoardLike], {
+    description: 'Return : User의 모든 SnkboardLike',
+  })
   fetchUserSnkLikes(
     @Args('userId', { description: '사용자 id' }) userId: string,
-  ){
+  ) {
     return this.snkBoardsLikesService.findAll({ userId });
   }
 
@@ -58,11 +73,12 @@ export class SnkBoardsLikesResolver {
     @Args('userId', { description: '사용자 id' }) userId: string,
     @Args('snkBoardId', { description: 'snkBoard id' }) snkBoardId: string,
   ) {
-    const fetchDeletedLike = await this.snkBoardsLikesService.findDeletedOne({ userId, snkBoardId });
-    if(fetchDeletedLike)
+    const fetchDeletedLike = await this.snkBoardsLikesService.findDeletedOne({
+      userId,
+      snkBoardId,
+    });
+    if (fetchDeletedLike)
       return this.snkBoardsLikesService.restoreDeleted({ userId, snkBoardId });
-    else
-      throw new NotFoundException("좋아요 삭제 기록이 없습니다.");
+    else throw new NotFoundException('좋아요 삭제 기록이 없습니다.');
   }
-
 }
