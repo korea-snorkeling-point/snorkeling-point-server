@@ -9,4 +9,12 @@ export class ProductCategoriesService {
     @InjectRepository(ProductCategory)
     private readonly productCategoriesRepositroy: Repository<ProductCategory>,
   ) {}
+
+  async create({ productCategory }) {
+    const newCategory = await this.productCategoriesRepositroy.save({
+      category: productCategory,
+    });
+
+    return newCategory;
+  }
 }

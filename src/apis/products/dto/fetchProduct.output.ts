@@ -1,7 +1,7 @@
-import { Field, Float, InputType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 
-@InputType()
-export class CreateProductInput {
+@ObjectType()
+export class FetchProductOutput {
   @Field(() => String)
   title: string;
 
@@ -19,4 +19,7 @@ export class CreateProductInput {
 
   @Field(() => [String], { nullable: true })
   productImages: string[];
+
+  @Field(() => Boolean, { defaultValue: false })
+  isLike: boolean;
 }

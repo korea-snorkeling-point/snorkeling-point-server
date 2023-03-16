@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductCategory } from '../productCategories/entities/productCategory.entity';
 import { ProductImage } from '../productsImages/entities/productImage.entity';
+import { ProductLike } from '../productsLikes/entities/productLike.entity';
+import { FetchProductOutput } from './dto/fetchProduct.output';
 import { Product } from './entities/product.entity';
 
 /**
@@ -19,10 +21,13 @@ export class ProductsService {
 
     @InjectRepository(ProductCategory)
     private readonly productCategoryRepository: Repository<ProductCategory>, //
+
+    @InjectRepository(ProductLike)
+    private readonly productLikeRepository: Repository<ProductLike>,
   ) {}
 
-  async findOne({ productId }) {
-    return await this.productsRepository.findOne({
+  async findOne({ productId, userId }) {
+    const product = await this.productsRepository.findOne({
       where: { id: productId },
       relations: {
         user: true,
@@ -32,6 +37,21 @@ export class ProductsService {
       },
       order: { productImages: { isMain: 'DESC' } },
     });
+
+    const productLike = await this.productLikeRepository.findOne({
+      where: { user: { id: userId }, product: { id: productId } },
+    });
+
+    const OneProduct = new FetchProductOutput();
+    OneProduct.address = product.address;
+    OneProduct.description = product.description;
+    OneProduct.price = product.price;
+    OneProduct.productCategory = product.productCategory.category;
+    // OneProduct.productImages = product.productImages;
+    OneProduct.title = product.title;
+    if (productLike) OneProduct.isLike = true;
+
+    return OneProduct;
   }
 
   async findAll({ page }) {
@@ -54,7 +74,8 @@ export class ProductsService {
     const checkCategory = await this.productCategoryRepository.findOne({
       where: { category: productCategory },
     });
-    if (!checkCategory) new ConflictException('존재하지 않는 카테고리입니다.');
+    if (!checkCategory)
+      throw new ConflictException('존재하지 않는 카테고리입니다.');
 
     // product 정보 저장
     const result = await this.productsRepository.save({
