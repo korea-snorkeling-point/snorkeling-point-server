@@ -29,7 +29,7 @@ export class ProductsLikesService {
     if (isCreated)
       throw new ConflictException('이미 좋아요를 누르신 상품입니다.');
 
-    const result = this.productsLikesRepository.create({
+    const result = this.productsLikesRepository.save({
       user: { id: userId },
       product: { id: productId },
     });
