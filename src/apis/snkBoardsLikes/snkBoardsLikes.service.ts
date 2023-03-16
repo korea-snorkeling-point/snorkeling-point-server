@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { SnkBoard } from '../snkBoards/entities/snkBoard.entity';
 import { SnkBoardLike } from './entities/snkBoardLike.entity';
 import { Cache } from 'cache-manager';
+import { User } from '../users/entities/user.entity';
 
 /**
  * SnkBoardLike Service
@@ -22,6 +23,9 @@ export class SnkBoardsLikesService {
 
     @InjectRepository(SnkBoard)
     private readonly snkBoardsRepository: Repository<SnkBoard>,
+
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
 
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
@@ -82,6 +86,25 @@ export class SnkBoardsLikesService {
     }
 
     return topFiveBoards;
+  }
+
+  async findWhoLikesBoard({ snkBoardId }) {
+    const selectedSnkBoardLikes = await this.snkBoardsLikesRepository.find({
+      where: { snkBoard: { id: snkBoardId } },
+      relations: {
+        user: true,
+      },
+    });
+
+    const result: User[] | null = [];
+    for (const snkBoardLike of selectedSnkBoardLikes) {
+      const user = await this.usersRepository.findOne({
+        where: { id: snkBoardLike.user.id },
+      });
+      result.push(user);
+    }
+
+    return result;
   }
 
   async findLikedBoards({ userId }) {

@@ -1,6 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { SnkBoard } from '../snkBoards/entities/snkBoard.entity';
+import { User } from '../users/entities/user.entity';
 import { SnkBoardLike } from './entities/snkBoardLike.entity';
 import { SnkBoardsLikesService } from './snkBoardsLikes.service';
 
@@ -15,6 +16,16 @@ export class SnkBoardsLikesResolver {
   })
   fetchTopFiveSnkBoards() {
     return this.snkBoardsLikesService.findTopFiveBoards();
+  }
+
+  @Query(() => [User], {
+    description: 'Return : SnkBoard에 좋아요를 누른 유저 목록',
+  })
+  fetchWhoLikesBoard(
+    @Args('snkBoardId', { description: '조회할 snkBoard id' })
+    snkBoardId: string,
+  ) {
+    return this.snkBoardsLikesService.findWhoLikesBoard({ snkBoardId });
   }
 
   @Query(() => [SnkBoard], { description: 'Return : User가 Like한 SnkBoards' })
