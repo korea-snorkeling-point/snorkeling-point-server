@@ -25,6 +25,13 @@ export class UsersService {
     return result;
   }
 
+  async check({ nickname }) {
+    const result = await this.usersRepository.findOne({
+      where: { nickname },
+    });
+    return result ? true : false;
+  }
+
   async create(createUserInput) {
     const user = await this.usersRepository.findOne({
       where: { email: createUserInput.email },
