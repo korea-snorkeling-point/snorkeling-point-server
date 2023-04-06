@@ -21,6 +21,14 @@ export class UsersResolver {
   ) {
     return this.usersService.findOne({ email });
   }
+
+  @Mutation(() => Boolean, { description: '유저 닉네임 중복 여부' })
+  async checkNickname(
+    @Args('nickname', { description: '중복확인 할 닉네임' }) nickname: string, //
+  ) {
+    return this.usersService.check({ nickname });
+  }
+
   @Mutation(() => User, { description: '회원가입' })
   async createUser(
     @Args('createUserInput', { description: '회원 가입 정보 입력' })
